@@ -5,6 +5,7 @@ import getpass
 import sys
 
 from animation import QiHi
+from bank_and_portf import BankAndPortfParam
 from cmd_wrapper import CmdWrapper
 from first_step_after_animation import FirstStepAfterAnimation
 from for_the_start_we_must import ForTheStartWeMust
@@ -40,11 +41,13 @@ def main():
     FirstStepAfterAnimation.start_or_not()
     ForTheStartWeMust.start_func()
 
+    bankObj = BankAndPortfParam()
+    bankObj.bank()  # выбираем банки и портфели
+    # далее вместо BankAndPortfParam() просто делаешь bankObj.метод 
+    # (bankObj.ret())
+
     # clearing vars
     user = None
-    cmd_color = None
-    cmd_lines = None
-
 
 
 def main_loop():
