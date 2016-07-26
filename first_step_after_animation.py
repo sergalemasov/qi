@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import os
+import sys
 from cmd_wrapper import CmdWrapper
 
 
@@ -8,11 +8,10 @@ class FirstStepAfterAnimation(object):
 
     @staticmethod
     def start_or_not():
-
         ask_continue = raw_input(u'\n\n\nПродолжаем? y \ n:   ')
         if ask_continue in u'Nn':
             print u'До новых встреч!'
-            exit()
+            sys.exit(0)
         else:
             CmdWrapper.cls()
 

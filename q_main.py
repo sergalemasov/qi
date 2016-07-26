@@ -1,47 +1,64 @@
 # -*- coding: utf-8 -*-
 import codecs
+import colorama
+import getpass
 import sys
 
-from termcolor import colored
-from first_concatenator import FirstModuleList
-from second_concatenator import SecondModuleList
-from colorama import init
 from animation import QiHi
-from predicats import Predicats
-from bank_and_portf import BankAndPortfParam
+from cmd_wrapper import CmdWrapper
 from first_step_after_animation import FirstStepAfterAnimation
 from for_the_start_we_must import ForTheStartWeMust
-from simple_query import simple_query
-from cmd_wrapper import CmdWrapper
-from query_wh_data import QueryWhData
-from query_i_collect import QueryICollect, bank, portfolio, phone_typ
-from exec_query import ExecQueryICollect, ExecQueryWhData
+from predicats import Predicats
+from termcolor import colored
 
-# подключаем русский язык
-sys.stdout = codecs.getwriter('cp866')(sys.stdout, 'replace')
 
+COLORAMA_INITIALIZED = False
 
 def main():
-    """Start Main() of Q-Interpreter"""
-    init()
-    CmdWrapper.cmd_size()
-    CmdWrapper.yellow()
-    QiHi().qi_rus()  # Animations
-    Predicats().show_predicats()  # показываем SQL предикаты
-    FirstStepAfterAnimation().start_or_not()  # продолжаем работать с программой
-    ForTheStartWeMust().start_func()  # показываем для начала выбрать банк и портфель
-    BankAndPortfParam().bank()  # выбираем банки и портфели
+    # local_vars    
+    cmd_color = "yellow"
+    cmd_lines = 49
+    # catching current user
+    user = getpass.getuser()
 
-    x = FirstModuleList().concatenator() + BankAndPortfParam().ret() + SecondModuleList().concatenator_2()
-    print x
-    print colored(simple_query(x), 'magenta')
+    global COLORAMA_INITIALIZED
+    # initializing colorama
+    if COLORAMA_INITIALIZED:
+        colorama.reinit()
+    else:
+        COLORAMA_INITIALIZED = True
+        colorama.init()
+    # defining cmd window space
+    CmdWrapper.cmd_size(cmd_lines)
+    # defining cmd color
+    CmdWrapper.cmd_color(cmd_color) 
+    # starting animation Q INTERPRETER
+    QiHi.qi_rus()
+    # showing SQL predicates
+    Predicats.show_predicats(user)
+
+    FirstStepAfterAnimation.start_or_not()
+    ForTheStartWeMust.start_func()
+
+    # clearing vars
+    user = None
+    cmd_color = None
+    cmd_lines = None
+
+
+
+def main_loop():
+    main()
+    while True:
+        a = raw_input(colored(u'Еще разок? y/n : ', 'green'))
+        while a not in u'yYnN':
+            a = raw_input(colored(u'Y or N?! : ', 'green'))
+        if a in u'Nn':
+            colorama.deinit()
+            sys.exit(0)
+        else:
+            main()
 
 
 if __name__ == '__main__':
-    while True:
-        main()
-        a = raw_input(colored(u'Еще разок? y \ n :  ', 'green'))
-        if a in u'Nn':
-            exit()
-        else:
-            continue
+    main_loop()    
